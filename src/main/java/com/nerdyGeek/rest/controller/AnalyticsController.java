@@ -25,6 +25,7 @@ public class AnalyticsController {
 
     @GetMapping
     public List<InstagramAnalytics> getAllAnalytics() {
+    	System.out.println("Got here");
         return instagramService.getAllInstagramAnalytics();
     }
 

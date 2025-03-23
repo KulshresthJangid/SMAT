@@ -3,6 +3,9 @@ package com.nerdyGeek.services;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +13,7 @@ import com.nerdyGeek.entities.User;
 import com.nerdyGeek.sql.repositories.UserRepository;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService{
 	@Autowired
 	private UserRepository userRepository;
 	
@@ -26,6 +29,12 @@ public class UserService {
 		if(Objects.nonNull(user) && passEncoder.matches(password, user.getPassword())) {
 			return user;
 		}
+		return null;
+	}
+
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		// TODO Auto-generated method stub
 		return null;
 	}
 }
