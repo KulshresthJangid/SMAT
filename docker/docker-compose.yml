@@ -1,6 +1,22 @@
 version: '3.8'
 
 services:
+  mariadb:
+    image: mariadb:latest
+    container_name: mariadb_container
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: smat
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    networks:
+      - mariadb_network
+
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.10.2
     container_name: elasticsearch
@@ -18,7 +34,15 @@ services:
       memlock:
         soft: -1
         hard: -1
+    networks:
+      - mariadb_network
 
 volumes:
+  mariadb_data:
+    driver: local
   elasticsearch_data:
     driver: local
+
+networks:
+  mariadb_network:
+    driver: bridge
