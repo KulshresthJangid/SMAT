@@ -19,13 +19,13 @@ import co.elastic.clients.transport.rest_client.RestClientTransport;
 @EnableElasticsearchRepositories(basePackages = "com.nerdyGeek.smat.elasticsearch")
 public class ElasticsearchConfig {
 
-    @Value("${elasticsearch.uris}")
+    @Value("${spring.elasticsearch.uris}")
     private String elasticsearchUri;
 
-    @Value("${elasticsearch.username}")
+    @Value("${spring.elasticsearch.username}")
     private String elasticsearchUsername;
 
-    @Value("${elasticsearch.password}")
+    @Value("${spring.elasticsearch.password}")
     private String elasticsearchPassword;
 
     @Bean

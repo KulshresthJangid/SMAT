@@ -29,7 +29,7 @@ public class AuthenticationService {
 		String password = passwordEncoder.encode(input.getPassword());
 		User user = new User();
 		user.setPassword(password);
-		user.setUsername(password);
+		user.setUsername(input.getUsername());
 
 		return userRepository.save(user);
 	}
