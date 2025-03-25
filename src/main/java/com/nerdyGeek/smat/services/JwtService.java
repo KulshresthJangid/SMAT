@@ -6,7 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -67,6 +68,10 @@ public class JwtService {
     private boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
+    
+    public boolean validateToken(String token) {
+        return !isTokenExpired(token);
+    }
 
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
@@ -79,6 +84,10 @@ public class JwtService {
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
+    }
+    
+    public Authentication getAuthenticationToken(String token, UserDetails userDetails) {
+        return new UsernamePasswordAuthenticationToken(userDetails, token, userDetails.getAuthorities());
     }
 
     private Key getSignInKey() {
