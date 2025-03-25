@@ -10,8 +10,8 @@ import com.nerdyGeek.smat.dto.LoginResponseDTO;
 import com.nerdyGeek.smat.dto.LoginUserDTO;
 import com.nerdyGeek.smat.dto.RegisterUserDTO;
 import com.nerdyGeek.smat.entities.User;
-import com.nerdyGeek.smat.services.AuthenticationService;
-import com.nerdyGeek.smat.services.JwtService;
+import com.nerdyGeek.smat.servicesImpl.AuthenticationService;
+import com.nerdyGeek.smat.servicesImpl.JwtService;
 
 @RequestMapping("/auth")
 @RestController

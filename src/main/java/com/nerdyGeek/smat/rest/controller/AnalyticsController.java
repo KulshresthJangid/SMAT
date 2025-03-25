@@ -2,7 +2,7 @@ package com.nerdyGeek.smat.rest.controller;
 
 import com.nerdyGeek.smat.documents.InstagramAnalytics;
 import com.nerdyGeek.smat.elastisearch.repositories.AnalyticsRepository;
-import com.nerdyGeek.smat.services.InstagramService;
+import com.nerdyGeek.smat.servicesImpl.InstagramService;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;

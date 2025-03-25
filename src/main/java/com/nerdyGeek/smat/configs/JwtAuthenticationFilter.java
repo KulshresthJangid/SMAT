@@ -17,7 +17,7 @@ import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
-import com.nerdyGeek.smat.services.JwtService;
+import com.nerdyGeek.smat.servicesImpl.JwtService;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

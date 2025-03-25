@@ -1,4 +1,4 @@
-package com.nerdyGeek.smat.services;
+package com.nerdyGeek.smat.servicesImpl;
 
 import java.security.Key;
 import java.util.Date;
