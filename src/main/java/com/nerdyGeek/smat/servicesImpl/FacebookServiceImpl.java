@@ -19,10 +19,8 @@ public class FacebookServiceImpl implements FacebookService {
 
 	@Override
 	public String getFacebookLongLivedTokenFromShortLivedToken(String shortLivedToken) {
-		FacebookAPIResponseDTO fbResponse = fbClient
-				.getFacebookLongLivedTokenFromShortLivedToken("ig_exchange_token", config.getClientId(),
-						config.getClientSecret(), shortLivedToken)
-				.getBody();
+		FacebookAPIResponseDTO fbResponse = fbClient.getFacebookLongLivedTokenFromShortLivedToken("ig_exchange_token",
+				config.getClientId(), config.getClientSecret(), shortLivedToken).getBody();
 		return fbResponse.getAccessToken();
 	}
 

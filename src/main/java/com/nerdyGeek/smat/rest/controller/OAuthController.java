@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.nerdyGeek.smat.configs.GlobalProperties;
 import com.nerdyGeek.smat.enums.SMPlatform;
 import com.nerdyGeek.smat.services.FacebookService;
+import com.nerdyGeek.smat.services.InstagramService;
 import com.nerdyGeek.smat.sql.repositories.UserRepository;
 
 @RestController
@@ -23,12 +24,15 @@ public class OAuthController {
 	private GlobalProperties config;
 	private UserRepository userRepository;
 	private FacebookService fbService;
+	private InstagramService instaService;
 
 	@Autowired
-	public OAuthController(GlobalProperties config, UserRepository userRepository, FacebookService fbService) {
+	public OAuthController(GlobalProperties config, UserRepository userRepository, FacebookService fbService,
+			InstagramService instagramService) {
 		this.config = config;
 		this.userRepository = userRepository;
 		this.fbService = fbService;
+		this.instaService = instagramService;
 	}
 
 	@GetMapping("/connect/{platform}")
@@ -39,7 +43,9 @@ public class OAuthController {
 			oAuthURL.append(config.getAuthUri());
 			oAuthURL.append("?response_type=" + config.getAuthorizationGrantType());
 			oAuthURL.append("&client_id=" + config.getClientId());
-			oAuthURL.append("&client_secret=" + config.getClientSecret());
+			oAuthURL.append("&force_authentication=" + 1);
+			oAuthURL.append("&enable_fb_login=" + 0);
+//			oAuthURL.append("&client_secret=" + config.getClientSecret());
 			oAuthURL.append("&scope=" + config.getScope().toString());
 			oAuthURL.append("&redirect_uri=" + config.getRedirectUri());
 			return ResponseEntity.status(HttpStatus.FOUND).header(HttpHeaders.LOCATION, oAuthURL.toString()).build();
@@ -50,8 +56,19 @@ public class OAuthController {
 	}
 
 	@GetMapping("/callback/instagram")
-	public ResponseEntity<Object> instagramLogin(@RequestParam(value = "access_token") String token) {
-		String longLivedToken = fbService.getFacebookLongLivedTokenFromShortLivedToken(token);
-		return null;
+	public ResponseEntity<Object> instagramLogin(@RequestParam(value = "code") String code) {
+		String longLivedToken = instaService.getAccessTokenFromCode(code);
+		return ResponseEntity.ok(longLivedToken);
+	}
+
+	@GetMapping("/webhook")
+	public String verifyWebhook(@RequestParam("hub.mode") String mode, @RequestParam("hub.challenge") String challenge,
+			@RequestParam("hub.verify_token") String verifyToken) {
+
+		if ("subscribe".equals(mode) && "6350332180".equals(verifyToken)) {
+			return challenge; // Respond with challenge token to verify
+		} else {
+			return "Invalid token"; // Verification failed
+		}
 	}
 }
