@@ -45,7 +45,6 @@ public class OAuthController {
 			oAuthURL.append("&client_id=" + config.getClientId());
 			oAuthURL.append("&force_authentication=" + 1);
 			oAuthURL.append("&enable_fb_login=" + 0);
-//			oAuthURL.append("&client_secret=" + config.getClientSecret());
 			oAuthURL.append("&scope=" + config.getScope().toString());
 			oAuthURL.append("&redirect_uri=" + config.getRedirectUri());
 			return ResponseEntity.status(HttpStatus.FOUND).header(HttpHeaders.LOCATION, oAuthURL.toString()).build();
