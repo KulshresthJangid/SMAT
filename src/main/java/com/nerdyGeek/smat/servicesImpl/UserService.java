@@ -9,7 +9,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.nerdyGeek.smat.entities.User;
+import com.nerdyGeek.smat.entities.UserEntity;
 import com.nerdyGeek.smat.sql.repositories.UserRepository;
 
 @Service
@@ -19,13 +19,13 @@ public class UserService implements UserDetailsService{
 	
 	private BCryptPasswordEncoder passEncoder = new BCryptPasswordEncoder();
 	
-	public void registerUser(User user) {
+	public void registerUser(UserEntity user) {
 		user.setPassword(passEncoder.encode(user.getPassword()));
 		userRepository.save(user);
 	}
 	
-	public User authenticateUser(String username, String password) {
-		User user = userRepository.findByUsername(username);
+	public UserEntity authenticateUser(String username, String password) {
+		UserEntity user = userRepository.findByUsername(username);
 		if(Objects.nonNull(user) && passEncoder.matches(password, user.getPassword())) {
 			return user;
 		}

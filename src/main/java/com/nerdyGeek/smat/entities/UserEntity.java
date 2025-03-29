@@ -15,12 +15,13 @@ import lombok.Data;
 @Table(name = "users")
 @Entity
 @Data
-public class User implements UserDetails {
+public class UserEntity extends BaseEntity implements UserDetails {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String username;
 	private String password;
+	private String email;
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		// TODO Auto-generated method stub

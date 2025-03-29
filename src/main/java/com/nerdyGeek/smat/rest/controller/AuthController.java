@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.nerdyGeek.smat.dto.LoginResponseDTO;
 import com.nerdyGeek.smat.dto.LoginUserDTO;
 import com.nerdyGeek.smat.dto.RegisterUserDTO;
-import com.nerdyGeek.smat.entities.User;
+import com.nerdyGeek.smat.entities.UserEntity;
 import com.nerdyGeek.smat.servicesImpl.AuthenticationService;
 import com.nerdyGeek.smat.servicesImpl.JwtService;
 
@@ -27,15 +27,15 @@ private final JwtService jwtService;
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<User> register(@RequestBody RegisterUserDTO registerUserDto) {
-        User registeredUser = authenticationService.signup(registerUserDto);
+    public ResponseEntity<UserEntity> register(@RequestBody RegisterUserDTO registerUserDto) {
+        UserEntity registeredUser = authenticationService.signup(registerUserDto);
 
         return ResponseEntity.ok(registeredUser);
     }
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> authenticate(@RequestBody LoginUserDTO loginUserDto) {
-        User authenticatedUser = authenticationService.authenticate(loginUserDto);
+        UserEntity authenticatedUser = authenticationService.authenticate(loginUserDto);
 
         String jwtToken = jwtService.generateToken(authenticatedUser);
 
