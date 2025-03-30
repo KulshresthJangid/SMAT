@@ -1,41 +1,72 @@
 package com.nerdyGeek.smat.rest.controller;
 
+import java.util.Objects;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nerdyGeek.smat.dto.APIResponseDTO;
 import com.nerdyGeek.smat.dto.LoginResponseDTO;
 import com.nerdyGeek.smat.dto.LoginUserDTO;
 import com.nerdyGeek.smat.dto.RegisterUserDTO;
 import com.nerdyGeek.smat.entities.UserEntity;
-import com.nerdyGeek.smat.servicesImpl.AuthenticationService;
-import com.nerdyGeek.smat.servicesImpl.JwtService;
+import com.nerdyGeek.smat.services.AuthenticationService;
+import com.nerdyGeek.smat.services.JwtService;
+import com.nerdyGeek.smat.services.UserDataService;
 
 @RequestMapping("/auth")
 @RestController
 public class AuthController {
 
-private final JwtService jwtService;
-    
+    private final JwtService jwtService;
+
     private final AuthenticationService authenticationService;
 
-    public AuthController(JwtService jwtService, AuthenticationService authenticationService) {
+    private final UserDataService userDataService;
+
+    public AuthController(JwtService jwtService,
+            AuthenticationService authenticationService,
+            UserDataService userDataService) {
         this.jwtService = jwtService;
         this.authenticationService = authenticationService;
+        this.userDataService = userDataService;
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<UserEntity> register(@RequestBody RegisterUserDTO registerUserDto) {
-        UserEntity registeredUser = authenticationService.signup(registerUserDto);
-
-        return ResponseEntity.ok(registeredUser);
+    public ResponseEntity<APIResponseDTO<RegisterUserDTO>> register(
+            @RequestBody RegisterUserDTO registerUserDTO) {
+        UserEntity existingUser = userDataService.findByUsernameAndEmail(
+                registerUserDTO.getUsername(), registerUserDTO.getEmail());
+        if (Objects.nonNull(existingUser)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new APIResponseDTO(HttpStatus.BAD_REQUEST,
+                            "User already exists with the same username and email!!",
+                            null));
+        }
+        UserEntity registeredUser = authenticationService
+                .signup(registerUserDTO);
+        registerUserDTO.setPassword(null);
+        return ResponseEntity.ok(new APIResponseDTO<RegisterUserDTO>(
+                HttpStatus.CREATED, "User Created Successfully please login!!",
+                registerUserDTO));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDTO> authenticate(@RequestBody LoginUserDTO loginUserDto) {
-        UserEntity authenticatedUser = authenticationService.authenticate(loginUserDto);
+    public ResponseEntity<APIResponseDTO<LoginResponseDTO>> authenticate(
+            @RequestBody LoginUserDTO loginUserDto) {
+        UserEntity authenticatedUser = authenticationService
+                .authenticate(loginUserDto);
+
+        if (Objects.isNull(authenticatedUser)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new APIResponseDTO(HttpStatus.BAD_REQUEST,
+                            "No User Found With Provided Email!!", null));
+        }
 
         String jwtToken = jwtService.generateToken(authenticatedUser);
 
@@ -43,6 +74,8 @@ private final JwtService jwtService;
         loginResponse.setToken(jwtToken);
         loginResponse.setExpiresIn(jwtService.getExpirationTime());
 
-        return ResponseEntity.ok(loginResponse);
+        return ResponseEntity
+                .ok(new APIResponseDTO<LoginResponseDTO>(HttpStatus.OK,
+                        "User authenticated Successfully!", loginResponse));
     }
 }

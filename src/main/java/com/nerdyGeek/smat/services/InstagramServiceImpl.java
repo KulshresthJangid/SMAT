@@ -1,4 +1,4 @@
-package com.nerdyGeek.smat.servicesImpl;
+package com.nerdyGeek.smat.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -7,7 +7,7 @@ import com.nerdyGeek.smat.configs.GlobalProperties;
 import com.nerdyGeek.smat.dto.InstagramAPIResponseDTO;
 import com.nerdyGeek.smat.dto.InstagramAuthRequestDTO;
 import com.nerdyGeek.smat.feign.clients.InstgramFeignClients;
-import com.nerdyGeek.smat.services.InstagramService;
+import com.nerdyGeek.smat.interfaces.InstagramService;
 
 @Service
 public class InstagramServiceImpl implements InstagramService {

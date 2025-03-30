@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.nerdyGeek.smat.configs.GlobalProperties;
 import com.nerdyGeek.smat.enums.SMPlatform;
-import com.nerdyGeek.smat.services.FacebookService;
-import com.nerdyGeek.smat.services.InstagramService;
+import com.nerdyGeek.smat.interfaces.FacebookService;
+import com.nerdyGeek.smat.interfaces.InstagramService;
 import com.nerdyGeek.smat.sql.repositories.UserRepository;
 
 @RestController

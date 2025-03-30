@@ -1,4 +1,4 @@
-package com.nerdyGeek.smat.servicesImpl;
+package com.nerdyGeek.smat.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import com.nerdyGeek.smat.configs.GlobalProperties;
 import com.nerdyGeek.smat.dto.FacebookAPIResponseDTO;
 import com.nerdyGeek.smat.feign.clients.FacebookFeignClient;
-import com.nerdyGeek.smat.services.FacebookService;
+import com.nerdyGeek.smat.interfaces.FacebookService;
 
 @Service
 public class FacebookServiceImpl implements FacebookService {
