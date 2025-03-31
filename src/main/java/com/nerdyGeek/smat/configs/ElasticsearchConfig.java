@@ -30,23 +30,20 @@ public class ElasticsearchConfig {
 
     @Bean
     public ElasticsearchClient elasticsearchClient() {
-        // Create Basic Auth Header
         String auth = elasticsearchUsername + ":" + elasticsearchPassword;
-        String encodedAuth = Base64.getEncoder().encodeToString(auth.getBytes());
-        Header authHeader = new BasicHeader("Authorization", "Basic " + encodedAuth);
+        String encodedAuth = Base64.getEncoder()
+                .encodeToString(auth.getBytes());
+        Header authHeader = new BasicHeader("Authorization",
+                "Basic " + encodedAuth);
 
-        // Parse Elasticsearch URI
         HttpHost host = HttpHost.create(elasticsearchUri);
 
-        // Create REST Client
         RestClient restClient = RestClient.builder(host)
-                .setDefaultHeaders(new Header[]{authHeader})
-                .build();
+                .setDefaultHeaders(new Header[] { authHeader }).build();
 
-        // Create Elasticsearch Transport
-        RestClientTransport transport = new RestClientTransport(restClient, new JacksonJsonpMapper());
+        RestClientTransport transport = new RestClientTransport(restClient,
+                new JacksonJsonpMapper());
 
-        // Return Elasticsearch Client
         return new ElasticsearchClient(transport);
     }
 }

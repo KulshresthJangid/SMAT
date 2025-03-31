@@ -73,6 +73,8 @@ public class AuthController {
         LoginResponseDTO loginResponse = new LoginResponseDTO();
         loginResponse.setToken(jwtToken);
         loginResponse.setExpiresIn(jwtService.getExpirationTime());
+        loginResponse.setEmail(authenticatedUser.getEmail());
+        loginResponse.setUsername(authenticatedUser.getUsername());
 
         return ResponseEntity
                 .ok(new APIResponseDTO<LoginResponseDTO>(HttpStatus.OK,
