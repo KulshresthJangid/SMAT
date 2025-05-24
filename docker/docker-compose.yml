@@ -21,11 +21,12 @@ services:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.10.2
     container_name: elasticsearch
     environment:
+      - xpack.security.enabled=false
       - discovery.type=single-node
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
       - ELASTIC_USERNAME=guest
-      - ELASTIC_PASSWORD=123@abc
+      - ELASTIC_PASSWORD=nopasswordhere
     ports:
       - "9200:9200"
     volumes:

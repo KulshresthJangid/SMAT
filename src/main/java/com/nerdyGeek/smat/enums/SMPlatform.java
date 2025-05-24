@@ -1,7 +1,7 @@
 package com.nerdyGeek.smat.enums;
 
 public enum SMPlatform {
-    instagram("INSTAGRAM"); // Custom string value
+    instagram("INSTAGRAM"), whatsapp_cloud("WHATSAPP_CLOUD");
 
     private final String value;
 

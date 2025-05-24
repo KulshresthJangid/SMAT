@@ -45,9 +45,12 @@ public class OAuthController {
 			oAuthURL.append("&client_id=" + config.getClientId());
 			oAuthURL.append("&force_authentication=" + 1);
 			oAuthURL.append("&enable_fb_login=" + 0);
-			oAuthURL.append("&scope=" + config.getScope().toString());
+			oAuthURL.append("&scope=" + config.getScope());
 			oAuthURL.append("&redirect_uri=" + config.getRedirectUri());
 			return ResponseEntity.status(HttpStatus.FOUND).header(HttpHeaders.LOCATION, oAuthURL.toString()).build();
+		}
+		case whatsapp_cloud: {
+
 		}
 		default:
 			throw new IllegalArgumentException("Unexpected value: " + smPlatform);
@@ -60,14 +63,5 @@ public class OAuthController {
 		return ResponseEntity.ok(longLivedToken);
 	}
 
-	@GetMapping("/webhook")
-	public String verifyWebhook(@RequestParam("hub.mode") String mode, @RequestParam("hub.challenge") String challenge,
-			@RequestParam("hub.verify_token") String verifyToken) {
 
-		if ("subscribe".equals(mode) && "6350332180".equals(verifyToken)) {
-			return challenge; // Respond with challenge token to verify
-		} else {
-			return "Invalid token"; // Verification failed
-		}
-	}
 }
