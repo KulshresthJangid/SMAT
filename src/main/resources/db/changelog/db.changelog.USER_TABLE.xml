@@ -5,7 +5,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-	<changeSet id="1" author="kulshresth">
+	<changeSet id="create-user-table" author="kulshresth">
 		<createTable tableName="users">
 			<column name="id" type="BIGINT" autoIncrement="true">
 				<constraints primaryKey="true" nullable="false" />
@@ -18,6 +18,9 @@
 			</column>
 			<column name="password" type="VARCHAR(255)">
 				<constraints nullable="false" />
+			</column>
+			<column name="org_id" type="BIGINT">
+				<constraints foreignKeyName="fk_org_id" references="organizations(id)" nullable="false" />
 			</column>
 			<column name="is_enabled" type="BOOLEAN" defaultValue="true">
 				<constraints nullable="false" />
@@ -34,3 +37,8 @@
 	</changeSet>
 
 </databaseChangeLog>
+
+
+// create entity for the organizations
+// have a one to many maping in it
+// Then we have to implmeent the channels table.

@@ -2,14 +2,10 @@ package com.nerdyGeek.smat.entities;
 
 import java.util.Collection;
 
+import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import lombok.Data;
 
 @Table(name = "users")
@@ -22,6 +18,10 @@ public class UserEntity extends BaseEntity implements UserDetails {
 	private String username;
 	private String password;
 	private String email;
+
+	@ManyToOne
+	@JoinColumn(name = "org_id", nullable = false)
+	private OrganizationsEntity organization;
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		// TODO Auto-generated method stub
