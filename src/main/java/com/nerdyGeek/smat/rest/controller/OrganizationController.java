@@ -5,7 +5,6 @@ import com.nerdyGeek.smat.dto.APIResponseDTO;
 import com.nerdyGeek.smat.dto.OrganizationDTO;
 import com.nerdyGeek.smat.entities.OrganizationsEntity;
 import com.nerdyGeek.smat.services.DatabaseService;
-import org.aspectj.weaver.ast.Or;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
