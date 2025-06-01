@@ -3,7 +3,6 @@ package com.nerdyGeek.smat.rest.controller;
 import java.util.Objects;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,7 +16,7 @@ import com.nerdyGeek.smat.dto.RegisterUserDTO;
 import com.nerdyGeek.smat.entities.UserEntity;
 import com.nerdyGeek.smat.services.AuthenticationService;
 import com.nerdyGeek.smat.services.JwtService;
-import com.nerdyGeek.smat.services.UserDataService;
+import com.nerdyGeek.smat.services.DatabaseService;
 
 @RequestMapping("/auth")
 @RestController
@@ -27,20 +26,20 @@ public class AuthController {
 
     private final AuthenticationService authenticationService;
 
-    private final UserDataService userDataService;
+    private final DatabaseService databaseService;
 
     public AuthController(JwtService jwtService,
             AuthenticationService authenticationService,
-            UserDataService userDataService) {
+            DatabaseService databaseService) {
         this.jwtService = jwtService;
         this.authenticationService = authenticationService;
-        this.userDataService = userDataService;
+        this.databaseService = databaseService;
     }
 
     @PostMapping("/signup")
     public ResponseEntity<APIResponseDTO<RegisterUserDTO>> register(
             @RequestBody RegisterUserDTO registerUserDTO) {
-        UserEntity existingUser = userDataService.findByUsernameAndEmail(
+        UserEntity existingUser = databaseService.findByUsernameAndEmail(
                 registerUserDTO.getUsername(), registerUserDTO.getEmail());
         if (Objects.nonNull(existingUser)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)

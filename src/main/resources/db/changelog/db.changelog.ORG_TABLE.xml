@@ -16,6 +16,9 @@
             <column name="email" type="VARCHAR(255)">
                 <constraints unique="true" nullable="false" />
             </column>
+            <column name="phone_number" type="VARCHAR(255)">
+                <constraints unique="true" nullable="false" />
+            </column>
             <column name="subscription_status" type="ENUM('ACTIVE', 'EXPIRED', 'TRIAL')">
                 <constraints nullable="false" />
             </column>

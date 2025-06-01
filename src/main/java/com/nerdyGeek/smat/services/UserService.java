@@ -16,17 +16,17 @@ import com.nerdyGeek.smat.entities.UserEntity;
 public class UserService implements UserDetailsService {
 
     @Autowired
-    private UserDataService userDataService;
+    private DatabaseService databaseService;
 
     private BCryptPasswordEncoder passEncoder = new BCryptPasswordEncoder();
 
     public void registerUser(UserEntity user) {
         user.setPassword(passEncoder.encode(user.getPassword()));
-        userDataService.save(user);
+        databaseService.save(user);
     }
 
     public UserEntity authenticateUser(String username, String password) {
-        UserEntity user = userDataService.findByUsername(username);
+        UserEntity user = databaseService.findByUsername(username);
         if (Objects.nonNull(user)
                 && passEncoder.matches(password, user.getPassword())) {
             return user;
@@ -37,7 +37,7 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String cred)
             throws UsernameNotFoundException {
-        UserEntity user = userDataService.findByUsernameOrEmail(cred, cred);
+        UserEntity user = databaseService.findByUsernameOrEmail(cred, cred);
         if (user == null) {
             throw new UsernameNotFoundException("User not found: " + cred);
         }

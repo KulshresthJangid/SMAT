@@ -2,7 +2,6 @@ package com.nerdyGeek.smat.services;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,14 +17,14 @@ public class AuthenticationService {
 
     private final AuthenticationManager authenticationManager;
 
-    private final UserDataService userDataService;
+    private final DatabaseService databaseService;
 
     public AuthenticationService(UserRepository userRepository,
             AuthenticationManager authenticationManager,
-            PasswordEncoder passwordEncoder, UserDataService userDataService) {
+            PasswordEncoder passwordEncoder, DatabaseService databaseService) {
         this.authenticationManager = authenticationManager;
         this.passwordEncoder = passwordEncoder;
-        this.userDataService = userDataService;
+        this.databaseService = databaseService;
     }
 
     public UserEntity signup(RegisterUserDTO input) {
@@ -34,7 +33,7 @@ public class AuthenticationService {
         user.setPassword(password);
         user.setUsername(input.getUsername());
         user.setEmail(input.getEmail());
-        return userDataService.save(user);
+        return databaseService.save(user);
     }
 
     public UserEntity authenticate(LoginUserDTO input) {
@@ -42,7 +41,7 @@ public class AuthenticationService {
                 .authenticate(new UsernamePasswordAuthenticationToken(
                         input.getUsernameOrEmail(), input.getPassword()));
 
-        return userDataService.findByUsernameOrEmail(input.getUsername(),
+        return databaseService.findByUsernameOrEmail(input.getUsername(),
                 input.getEmail());
     }
 }

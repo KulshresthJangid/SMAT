@@ -1,23 +1,28 @@
 package com.nerdyGeek.smat.entities;
 
+import com.nerdyGeek.smat.dto.OrganizationDTO;
 import com.nerdyGeek.smat.enums.SubscriptionStatus;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
-
-import java.util.List;
 
 @Data
 @Table(name = "organizations")
 @Entity
 public class OrganizationsEntity extends BaseEntity {
-    public long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Long id;
     public String name;
     public String email;
-    public SubscriptionStatus status;
+    public String phoneNumber;
+    @Enumerated(EnumType.ORDINAL)
+    public SubscriptionStatus subscriptionStatus;
 
-    @OneToMany(mappedBy = "organizations", cascade = CascadeType.ALL, orphanRemoval = true)
-    public List<UserEntity> users;
+    public OrganizationsEntity(OrganizationDTO organizationDTO) {
+        this.id = organizationDTO.getId();
+        this.name = organizationDTO.getName();
+        this.email = organizationDTO.getEmail();
+        this.phoneNumber = organizationDTO.getPhoneNumber();
+        this.subscriptionStatus = organizationDTO.getSubscriptionStatus();
+    }
 }

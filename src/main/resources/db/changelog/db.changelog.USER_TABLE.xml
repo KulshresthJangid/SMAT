@@ -37,8 +37,3 @@
 	</changeSet>
 
 </databaseChangeLog>
-
-
-// create entity for the organizations
-// have a one to many maping in it
-// Then we have to implmeent the channels table.
