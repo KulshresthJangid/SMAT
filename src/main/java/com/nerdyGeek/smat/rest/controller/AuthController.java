@@ -2,6 +2,7 @@ package com.nerdyGeek.smat.rest.controller;
 
 import java.util.Objects;
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,43 +29,29 @@ public class AuthController {
 
     private final DatabaseService databaseService;
 
-    public AuthController(JwtService jwtService,
-            AuthenticationService authenticationService,
-            DatabaseService databaseService) {
+    public AuthController(JwtService jwtService, AuthenticationService authenticationService, DatabaseService databaseService) {
         this.jwtService = jwtService;
         this.authenticationService = authenticationService;
         this.databaseService = databaseService;
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<APIResponseDTO<RegisterUserDTO>> register(
-            @RequestBody RegisterUserDTO registerUserDTO) {
-        UserEntity existingUser = databaseService.findByUsernameAndEmail(
-                registerUserDTO.getUsername(), registerUserDTO.getEmail());
+    public ResponseEntity<APIResponseDTO<RegisterUserDTO>> register(@RequestBody @Valid RegisterUserDTO registerUserDTO) {
+        UserEntity existingUser = databaseService.findByUsernameAndEmail(registerUserDTO.getUsername(), registerUserDTO.getEmail());
         if (Objects.nonNull(existingUser)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new APIResponseDTO(HttpStatus.BAD_REQUEST,
-                            "User already exists with the same username and email!!",
-                            null));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new APIResponseDTO(HttpStatus.BAD_REQUEST, "User already exists with the same username and email!!", null));
         }
-        UserEntity registeredUser = authenticationService
-                .signup(registerUserDTO);
+        UserEntity registeredUser = authenticationService.signup(registerUserDTO);
         registerUserDTO.setPassword(null);
-        return ResponseEntity.ok(new APIResponseDTO<RegisterUserDTO>(
-                HttpStatus.CREATED, "User Created Successfully please login!!",
-                registerUserDTO));
+        return ResponseEntity.ok(new APIResponseDTO<RegisterUserDTO>(HttpStatus.CREATED, "User Created Successfully please login!!", registerUserDTO));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<APIResponseDTO<LoginResponseDTO>> authenticate(
-            @RequestBody LoginUserDTO loginUserDto) {
-        UserEntity authenticatedUser = authenticationService
-                .authenticate(loginUserDto);
+    public ResponseEntity<APIResponseDTO<LoginResponseDTO>> authenticate(@RequestBody LoginUserDTO loginUserDto) {
+        UserEntity authenticatedUser = authenticationService.authenticate(loginUserDto);
 
         if (Objects.isNull(authenticatedUser)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new APIResponseDTO(HttpStatus.BAD_REQUEST,
-                            "No User Found With Provided Email!!", null));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new APIResponseDTO(HttpStatus.BAD_REQUEST, "No User Found With Provided Email!!", null));
         }
 
         String jwtToken = jwtService.generateToken(authenticatedUser);
@@ -75,8 +62,6 @@ public class AuthController {
         loginResponse.setEmail(authenticatedUser.getEmail());
         loginResponse.setUsername(authenticatedUser.getUsername());
 
-        return ResponseEntity
-                .ok(new APIResponseDTO<LoginResponseDTO>(HttpStatus.OK,
-                        "User authenticated Successfully!", loginResponse));
+        return ResponseEntity.ok(new APIResponseDTO<LoginResponseDTO>(HttpStatus.OK, "User authenticated Successfully!", loginResponse));
     }
 }

@@ -19,7 +19,7 @@ import io.jsonwebtoken.security.Keys;
 
 @Service
 public class JwtService {
-	
+
     private String secretKey = "SOEMTHIGNSOMETHINGSDFKJSDKLsadfasdfasdfasdfsdfasdfasdfasdfasdfFJS";
 
     private long jwtExpiration = 3600000;
@@ -45,19 +45,8 @@ public class JwtService {
         return jwtExpiration;
     }
 
-    private String buildToken(
-            Map<String, Object> extraClaims,
-            UserDetails userDetails,
-            long expiration
-    ) {
-        return Jwts
-                .builder()
-                .setClaims(extraClaims)
-                .setSubject(userDetails.getUsername())
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
-                .compact();
+    private String buildToken(Map<String, Object> extraClaims, UserDetails userDetails, long expiration) {
+        return Jwts.builder().setClaims(extraClaims).setSubject(userDetails.getUsername()).setIssuedAt(new Date(System.currentTimeMillis())).setExpiration(new Date(System.currentTimeMillis() + expiration)).signWith(getSignInKey(), SignatureAlgorithm.HS256).compact();
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
@@ -68,7 +57,7 @@ public class JwtService {
     private boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
-    
+
     public boolean validateToken(String token) {
         return !isTokenExpired(token);
     }
@@ -78,14 +67,9 @@ public class JwtService {
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts
-                .parserBuilder()
-                .setSigningKey(getSignInKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+        return Jwts.parserBuilder().setSigningKey(getSignInKey()).build().parseClaimsJws(token).getBody();
     }
-    
+
     public Authentication getAuthenticationToken(String token, UserDetails userDetails) {
         return new UsernamePasswordAuthenticationToken(userDetails, token, userDetails.getAuthorities());
     }

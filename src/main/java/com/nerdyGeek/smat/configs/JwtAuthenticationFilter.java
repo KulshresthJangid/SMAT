@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import com.nerdyGeek.smat.entities.UserEntity;
+import com.nerdyGeek.smat.services.UserService;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -31,7 +33,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	private final HandlerExceptionResolver handlerExceptionResolver;
 
     private final JwtService jwtService;
-    private final UserDetailsService userDetailsService;
+    private final UserService userService;
     
     private final List<String> NON_AUTH_END_POINTS = Collections.unmodifiableList(
             Arrays.asList("/**/*.js", "/**/*.css", "/**/*.gif", "/**/images/**", "/**/css/**", "/**/js/**", "/**/fonts/**", "/**/audio/**", "/**/lctest.html/**",
@@ -49,11 +51,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     
     public JwtAuthenticationFilter(
             JwtService jwtService,
-            UserDetailsService userDetailsService,
+            UserService userService,
             HandlerExceptionResolver handlerExceptionResolver
         ) {
             this.jwtService = jwtService;
-            this.userDetailsService = userDetailsService;
+            this.userService = userService;
             this.handlerExceptionResolver = handlerExceptionResolver;
         }
     @Override
@@ -76,17 +78,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
             if (userEmail != null && authentication == null) {
-                UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
+                UserEntity userEntity = (UserEntity) this.userService.loadUserByUsername(userEmail);
 
-                if (jwtService.isTokenValid(jwt, userDetails)) {
+                if (jwtService.isTokenValid(jwt, userEntity) && userEntity.getOrganization().isEnabled()) {
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                            userDetails,
+                            userEntity,
                             null,
-                            userDetails.getAuthorities()
+                            userEntity.getAuthorities()
                     );
 
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                    request.setAttribute("user", userEntity);
                 }
             }
 
