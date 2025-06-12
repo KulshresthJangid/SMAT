@@ -19,8 +19,8 @@ import com.nerdyGeek.smat.services.AuthenticationService;
 import com.nerdyGeek.smat.services.JwtService;
 import com.nerdyGeek.smat.services.DatabaseService;
 
-@RequestMapping("/auth")
 @RestController
+@RequestMapping("/auth")
 public class AuthController {
 
     private final JwtService jwtService;
@@ -37,6 +37,7 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<APIResponseDTO<RegisterUserDTO>> register(@RequestBody @Valid RegisterUserDTO registerUserDTO) {
+
         UserEntity existingUser = databaseService.findByUsernameAndEmail(registerUserDTO.getUsername(), registerUserDTO.getEmail());
         if (Objects.nonNull(existingUser)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new APIResponseDTO(HttpStatus.BAD_REQUEST, "User already exists with the same username and email!!", null));

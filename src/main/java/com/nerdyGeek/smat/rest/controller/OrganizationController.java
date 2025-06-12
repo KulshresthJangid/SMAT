@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
-@RequestMapping("/organization")
+@RestController
+@RequestMapping("/organizations")
 public class OrganizationController {
 
     private static final Logger logger = LoggerFactory.getLogger(OrganizationController.class);
@@ -77,3 +78,4 @@ public class OrganizationController {
     }
 
 }
+
