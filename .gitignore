@@ -1,5 +1,6 @@
 target
 src/main/resources/application-dev.yml
+src/main/resources/application.yml
 docker/.env
 .classpath
 .factorypath
