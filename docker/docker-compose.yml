@@ -38,6 +38,29 @@ services:
     networks:
       - mariadb_network
 
+  echo-post-backend:
+    container_name: echo_post_backend
+    environment:
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - ES_HOST=${ES_HOST}
+      - ES_PORT=${ES_PORT}
+      - INSTAGRAM_CLIENT_ID='asdfasdfasfasd'
+      - INSTAGRAM_CLIENT_SECRET="asdfasfasdf"
+      - INSTAGRAM_REDIRECT_URI="asdfasdfasdfasfsdf"
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mariadb
+      - elasticsearch
+    networks:
+      - mariadb_network
 volumes:
   mariadb_data:
     driver: local

@@ -17,9 +17,9 @@ spring:
     password: 123@abc
 
 instagram:
-  client-id: <YOUR_CLIENT_ID>
-  client-secret: <YOUR_CLIENT_SECRET>
-  redirect-uri: <YOUR_REDIRECT_URI>
+  client-id: 1121361469184221
+  client-secret: 3f1c0ec4bf741db8a5a5587464e3384f
+  redirect-uri: https://a8b0-122-172-59-236.ngrok-free.app/oauth2/callback/instagram
   scope: "instagram_business_basic,instagram_business_manage_messages,instagram_business_manage_comments,instagram_business_content_publish,instagram_business_manage_insights"
   authorization-grant-type: code
   client-authentication-method: post

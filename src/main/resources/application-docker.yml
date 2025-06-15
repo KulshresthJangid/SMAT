@@ -1,0 +1,29 @@
+spring:
+  datasource:
+    url: jdbc:mariadb://${DB_HOST}:3306/${DB_NAME}
+    username: root
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    database-platform: org.hibernate.dialect.MariaDBDialect
+  liquibase:
+    change-log: classpath:/db/changelog/db.changelog-master.xml
+
+  elasticsearch:
+    uris: http://${ES_HOST}:${ES_PORT}
+    username: guest
+    password: 123@abc
+
+instagram:
+  client-id: ${INSTAGRAM_CLIENT_ID}
+  client-secret: ${INSTAGRAM_CLIENT_SECRET}
+  redirect-uri: ${INSTAGRAM_REDIRECT_URI}
+  scope: "instagram_business_basic,instagram_business_manage_messages,instagram_business_manage_comments,instagram_business_content_publish,instagram_business_manage_insights"
+  authorization-grant-type: code
+  client-authentication-method: post
+  authorization-uri: https://www.instagram.com/oauth/authorize
+  token-uri: https://graph.instagram.com/access_token
+  user-info-uri: https://graph.instagram.com/me
+  verification-token: TmiIYehIbhrmiyxvQsGNWyLmCFW
