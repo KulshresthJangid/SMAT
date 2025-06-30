@@ -3,6 +3,7 @@ package com.nerdyGeek.smat.rest.controller;
 import java.util.Objects;
 
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +20,7 @@ import com.nerdyGeek.smat.services.AuthenticationService;
 import com.nerdyGeek.smat.services.JwtService;
 import com.nerdyGeek.smat.services.DatabaseService;
 
+@Slf4j
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -36,15 +38,20 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<APIResponseDTO<RegisterUserDTO>> register(@RequestBody @Valid RegisterUserDTO registerUserDTO) {
+    public ResponseEntity<APIResponseDTO<Object>> register(@Valid @RequestBody RegisterUserDTO registerUserDTO) {
 
-        UserEntity existingUser = databaseService.findByUsernameAndEmail(registerUserDTO.getUsername(), registerUserDTO.getEmail());
-        if (Objects.nonNull(existingUser)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new APIResponseDTO(HttpStatus.BAD_REQUEST, "User already exists with the same username and email!!", null));
+        try {
+            UserEntity existingUser = databaseService.findByUsernameAndEmail(registerUserDTO.getUsername(), registerUserDTO.getEmail());
+            if (Objects.nonNull(existingUser)) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new APIResponseDTO(HttpStatus.BAD_REQUEST, "User already exists with the same username and email!!", null));
+            }
+            UserEntity registeredUser = authenticationService.signup(registerUserDTO);
+            registerUserDTO.setPassword(null);
+            return ResponseEntity.ok(new APIResponseDTO<>(HttpStatus.CREATED, "User Created Successfully please login!!", registerUserDTO));
+        } catch (Exception e) {
+            log.error("Error while registering user", e);
+            return ResponseEntity.internalServerError().body(new APIResponseDTO<>(HttpStatus.INTERNAL_SERVER_ERROR, "Error while registering user", e));
         }
-        UserEntity registeredUser = authenticationService.signup(registerUserDTO);
-        registerUserDTO.setPassword(null);
-        return ResponseEntity.ok(new APIResponseDTO<RegisterUserDTO>(HttpStatus.CREATED, "User Created Successfully please login!!", registerUserDTO));
     }
 
     @PostMapping("/login")
