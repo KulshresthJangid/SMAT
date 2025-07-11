@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="create-user-roles-table" author="kulshresth">
+        <createTable tableName="user_roles">
+            <column name="user_id" type="BIGINT">
+                <!--                <constraints foreignKeyName="fk_user_id" references="users(id)" nullable="false"/>-->
+                <constraints nullable="false"/>
+            </column>
+            <column name="role_id" type="BIGINT">
+                <!--                <constraints foreignKeyName="fk_roles_id" references="roles(id)" nullable="false"/>-->
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey tableName="user_roles" columnNames="user_id, role_id" constraintName="pk_user_roles"/>
+        <update tableName="user_roles">
+            <column name="user_id" type="BIGINT">
+                <constraints foreignKeyName="fk_user_id" references="users(id)" nullable="false"/>
+            </column>
+            <column name="role_id" type="BIGINT">
+                <constraints foreignKeyName="fk_roles_id" references="roles(id)" nullable="false"/>
+            </column>
+        </update>
+
+
+    </changeSet>
+
+</databaseChangeLog>

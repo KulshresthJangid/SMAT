@@ -7,5 +7,9 @@
 
 	<include file="db/changelog/db.changelog.ORG_TABLE.xml" />
 	<include file="db/changelog/db.changelog.USER_TABLE.xml" />
+	<include file="db/changelog/db.changelog.PERMISSIONS_TABLE.xml" />
+	<include file="db/changelog/db.changelog.ROLES_TABLE.xml" />
+	<include file="db/changelog/db.changelog.ROLE_PERMISSIONS_TABLE.xml" />
+	<include file="db/changelog/db.changelog.USER_ROLES.xml" />
 
 </databaseChangeLog>
