@@ -39,7 +39,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http)
             throws Exception {
         http.csrf().disable().authorizeHttpRequests()
-                .requestMatchers("/auth/**", "/oauth2/**", "/webhook/**", "/organizations/**").permitAll()
+                .requestMatchers("/auth/**", "/oauth2/**", "/debug/**", "/webhook/**", "/organizations/**").permitAll()
                 .anyRequest().authenticated().and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authenticationProvider(authenticationProvider)
