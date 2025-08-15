@@ -3,7 +3,6 @@ package com.nerdyGeek.smat.rest.controller;
 
 import com.nerdyGeek.smat.dto.APIResponseDTO;
 import com.nerdyGeek.smat.dto.ContentDTO;
-import com.nerdyGeek.smat.dto.OpenAIResponseDTO;
 import com.nerdyGeek.smat.enums.SMPlatform;
 import com.nerdyGeek.smat.services.CommonUtilityService;
 import com.nerdyGeek.smat.services.OpenAIService;
